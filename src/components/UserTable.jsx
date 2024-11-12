@@ -1,7 +1,9 @@
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const UserTable = () => {
   const navigate = useNavigate();
+  const users = useSelector((state) => state.users || []);
 
   const handleButtonClick = () => {
     navigate("/userForm");
@@ -13,35 +15,38 @@ const UserTable = () => {
         <table class="min-w-full table-auto border-collapse border border-gray-300">
           <thead class="bg-gray-100">
             <tr>
-              <th class="px-4 py-2 text-left text-gray-600 border border-gray-300">
-                Username
+              <th class="px-4 py-2 text-center text-gray-600 border border-gray-300 select-none text-lg">
+                Name
               </th>
-              <th class="px-4 py-2 text-left text-gray-600 border border-gray-300">
+              <th class="px-4 py-2 text-center text-gray-600 border border-gray-300 select-none text-lg">
+                LastName
+              </th>
+              <th class="px-4 py-2 text-center text-gray-600 border border-gray-300 select-none text-lg">
                 Date
               </th>
-              <th class="px-4 py-2 text-left text-gray-600 border border-gray-300">
-                Dropdown
+              <th class="px-4 py-2 text-center text-gray-600 border border-gray-300 select-none text-lg">
+                Skills
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr class="border-t border-gray-300">
-              <td class="px-4 py-2 text-gray-700 border border-gray-300">
-                john_doe
-              </td>
-              <td class="px-4 py-2 text-gray-700 border border-gray-300">
-                2024-11-10
-              </td>
-              <td class="px-4 py-2 text-gray-700 border border-gray-300">
-                2024-11-10
-              </td>
-              <td>
-                <button>delet</button>
-              </td>
-              <td>
-                <button>delet</button>
-              </td>
-            </tr>
+            {users.map((user, index) => (
+              <tr key={index} className="border-t border-gray-300">
+                <td className="px-4 py-2 text-gray-700 border border-gray-300 text-center  select-none text-base">
+                  {user.name}
+                </td>
+                <td className="px-4 py-2 text-gray-700 border border-gray-300 text-center select-none text-base">
+                  {user.lastName}
+                </td>
+                <td className="px-4 py-2 text-gray-700 border border-gray-300 text-center select-none text-base">
+                  {user.date}
+                </td>
+                <td className="px-4 py-2 text-gray-700 border border-gray-300 text-center select-none text-base">
+                  {user.dropDown}
+                </td>
+                <button>Edit</button>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

@@ -1,8 +1,11 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useDispatch } from "react-redux";
+import { addUser } from "../Redux/userActions";
 
 import Select from "react-select";
+import { useNavigate } from "react-router-dom";
 const selectOptions = [
   { value: "react", label: "React" },
   { value: "nextJs", label: "NextJs" },
@@ -17,9 +20,33 @@ const UserForm = () => {
   const [lastName, setLastName] = useState("");
   const [selectedDate, setSelectDate] = useState("");
   const [dropDown, setDropDown] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   //#endregion --------------- stats ---------------------
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!name || !lastName || !selectedDate || !dropDown.length) {
+      alert("all field are required ");
+      return;
+    }
+    const newUser = {
+      name,
+      lastName,
+      date: new Date(selectedDate).toLocaleDateString(),
+      dropDown: dropDown.map((option) => option.label).join(", "),
+    };
+
+    dispatch(addUser(newUser));
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+
+    setName("");
+    setLastName("");
+    setSelectDate(null);
+    setDropDown([]);
+    navigate("/");
   };
 
   const handleDateChange = (date) => {
@@ -62,6 +89,8 @@ const UserForm = () => {
           isMulti
           name="colors"
           options={selectOptions}
+          value={dropDown}
+          onChange={setDropDown}
           className="basic-multi-select"
           classNamePrefix="select"
         />
