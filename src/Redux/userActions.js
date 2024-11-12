@@ -16,3 +16,10 @@ export const deleteUser = (userId) => ({
   type: DELETE_USER,
   payload: userId,
 });
+
+export const EDIT_USER = "EDIT_USER";
+
+export const editUser = (editUser) => ({
+  type: EDIT_USER,
+  payload: editUser,
+});

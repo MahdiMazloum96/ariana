@@ -1,10 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../Redux/userActions";
+import { useState } from "react";
+import UserEditModal from "./USerEditModal";
 
 const UserTable = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
   const users = useSelector((state) => state.users || []);
 
   const handleButtonClick = () => {
@@ -13,6 +18,15 @@ const UserTable = () => {
 
   const handleDeleteClick = (id) => {
     dispatch(deleteUser(id));
+  };
+
+  const handleEditClick = (user) => {
+    setSelectedUser(user);
+    setShowModal(true);
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedUser(null);
   };
 
   return (
@@ -60,7 +74,7 @@ const UserTable = () => {
                     </button>
                     <button
                       className="bg-green-500 text-white rounded-lg p-2 m-2 w-20"
-                      onClick={() => handleDeleteClick(user.id)}
+                      onClick={() => handleEditClick(user)}
                     >
                       Edit
                     </button>
@@ -70,6 +84,9 @@ const UserTable = () => {
             ))}
           </tbody>
         </table>
+        {showModal && (
+          <UserEditModal user={selectedUser} onClose={handleCloseModal} />
+        )}
       </div>
       <button
         className="rounded-full bg-green-700  absolute text-white px-4 py-2   bottom-4 right-4"

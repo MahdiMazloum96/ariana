@@ -1,4 +1,4 @@
-import { ADD_USER, DELETE_USER } from "./userActions";
+import { ADD_USER, DELETE_USER, EDIT_USER } from "./userActions";
 
 const initialState = {
   users: Array.isArray(JSON.parse(localStorage.getItem("users")))
@@ -24,6 +24,13 @@ const userReducer = (state = initialState, action) => {
         ...state,
         users: filteredUsers,
       };
+    case EDIT_USER:
+      const editedUsers = state.users.map((user) =>
+        user.id === action.payload.id ? { ...user, ...action.payload } : user
+      );
+      localStorage.setItem("users", JSON.stringify(editedUsers));
+      return { ...state, users: editedUsers };
+
     default:
       return state;
   }
