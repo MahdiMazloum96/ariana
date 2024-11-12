@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { editUser } from "../Redux/userActions";
+
+import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Select from "react-select";
 
 const selectOptions = [
   { value: "react", label: "React" },
@@ -12,7 +13,9 @@ const selectOptions = [
   { value: "tailwind", label: "Tailwind" },
 ];
 
-const UserEditModal = ({ user, onClose, onSave }) => {
+const UserEditModal = ({ user, onClose }) => {
+  //#region --------------- stats ---------------------
+
   const [name, setName] = useState(user.name);
   const [lastName, setLastName] = useState(user.lastName);
   const [selectedDate, setSelectDate] = useState(new Date(user.date));
@@ -21,19 +24,10 @@ const UserEditModal = ({ user, onClose, onSave }) => {
       .split(", ")
       .map((label) => selectOptions.find((opt) => opt.label === label))
   );
-
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setName(user.name);
-    setLastName(user.lastName);
-    setSelectDate(new Date(user.date));
-    setDropDown(
-      user.dropDown
-        .split(", ")
-        .map((label) => selectOptions.find((opt) => opt.label === label))
-    );
-  }, [user]);
+  //#endregion --------------- stats ---------------------
+  //#region --------------- logics ---------------------
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,7 +43,6 @@ const UserEditModal = ({ user, onClose, onSave }) => {
       date: new Date(selectedDate).toLocaleDateString(),
       dropDown: dropDown.map((option) => option.label).join(", "),
     };
-
     dispatch(editUser(updatedUser));
 
     const users = JSON.parse(localStorage.getItem("users"));
@@ -58,6 +51,19 @@ const UserEditModal = ({ user, onClose, onSave }) => {
 
     onClose();
   };
+  //#endregion --------------- logics ---------------------
+  //#region --------------- useEffects ---------------------
+  useEffect(() => {
+    setName(user.name);
+    setLastName(user.lastName);
+    setSelectDate(new Date(user.date));
+    setDropDown(
+      user.dropDown
+        .split(", ")
+        .map((label) => selectOptions.find((opt) => opt.label === label))
+    );
+  }, [user]);
+  //#endregion --------------- useEffects ---------------------
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">

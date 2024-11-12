@@ -5,12 +5,17 @@ import { useState } from "react";
 import UserEditModal from "./USerEditModal";
 
 const UserTable = () => {
+  //#region --------------- stats ---------------------
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+  const [addHover, setAddHover] = useState(false);
   const users = useSelector((state) => state.users || []);
+
+  //#endregion --------------- stats ---------------------
+  //#region --------------- logics ---------------------
 
   const handleButtonClick = () => {
     navigate("/userForm");
@@ -24,10 +29,20 @@ const UserTable = () => {
     setSelectedUser(user);
     setShowModal(true);
   };
+
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedUser(null);
   };
+
+  const handleShowAddHover = () => {
+    setAddHover(true);
+  };
+
+  const handleHideAddHover = () => {
+    setAddHover(false);
+  };
+  //#endregion --------------- logics ---------------------
 
   return (
     <div className="relative h-[calc(100vh-4rem)]">
@@ -91,9 +106,16 @@ const UserTable = () => {
       <button
         className="rounded-full bg-green-700  absolute text-white px-4 py-2   bottom-4 right-4"
         onClick={handleButtonClick}
+        onMouseEnter={handleShowAddHover}
+        onMouseLeave={handleHideAddHover}
       >
         +
       </button>
+      {addHover && (
+        <div className="rounded-full bg-gray-700 absolute text-white px-4 py-2   bottom-12 right-12">
+          Add New User
+        </div>
+      )}
     </div>
   );
 };

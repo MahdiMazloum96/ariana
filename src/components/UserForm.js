@@ -1,11 +1,12 @@
-import { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../Redux/userActions";
-
-import Select from "react-select";
 import { useNavigate } from "react-router-dom";
+
+import DatePicker from "react-datepicker";
+import Select from "react-select";
+import "react-datepicker/dist/react-datepicker.css";
+
 const selectOptions = [
   { value: "react", label: "React" },
   { value: "nextJs", label: "NextJs" },
@@ -22,8 +23,11 @@ const UserForm = () => {
   const [dropDown, setDropDown] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const inputRef = useRef();
 
   //#endregion --------------- stats ---------------------
+  //#region --------------- logics ---------------------
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !lastName || !selectedDate || !dropDown.length) {
@@ -52,7 +56,13 @@ const UserForm = () => {
   const handleDateChange = (date) => {
     setSelectDate(date);
   };
+  //#endregion --------------- logics ---------------------
+  //#region --------------- useEffects ---------------------
 
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+  //#endregion --------------- useEffects ---------------------
   return (
     <div className="h-full w-1/3 m-auto p-10 shadow-lg mt-14">
       <form
@@ -65,6 +75,7 @@ const UserForm = () => {
           onChange={(e) => setName(e.target.value)}
           placeholder="Name"
           className="border p-2 rounded w-full"
+          ref={inputRef}
         />
         <input
           type="text"
