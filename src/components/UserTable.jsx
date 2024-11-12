@@ -1,12 +1,18 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { deleteUser } from "../Redux/userActions";
 
 const UserTable = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const users = useSelector((state) => state.users || []);
 
   const handleButtonClick = () => {
     navigate("/userForm");
+  };
+
+  const handleDeleteClick = (id) => {
+    dispatch(deleteUser(id));
   };
 
   return (
@@ -44,7 +50,22 @@ const UserTable = () => {
                 <td className="px-4 py-2 text-gray-700 border border-gray-300 text-center select-none text-base">
                   {user.dropDown}
                 </td>
-                <button>Edit</button>
+                <td className="w-72">
+                  <div className="flex justify-center">
+                    <button
+                      className="bg-red-500 text-white rounded-lg p-2 m-2 w-20"
+                      onClick={() => handleDeleteClick(user.id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="bg-green-500 text-white rounded-lg p-2 m-2 w-20"
+                      onClick={() => handleDeleteClick(user.id)}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
